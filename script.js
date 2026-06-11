@@ -6,7 +6,7 @@ const ctx = canvas.getContext('2d');
 let isAdultMode = false;
 let adultUnlocked = false;
 
-// ФОТОГРАФИИ - используем относительные пути
+// ФОТОГРАФИИ для обычного режима
 const normalPhotosList = [
     'Images/angel1.jpg', 'Images/angel2.jpg', 'Images/angel3.jpg',
     'Images/angel4.jpg', 'Images/angel5.jpg', 'Images/angel6.jpg',
@@ -15,16 +15,16 @@ const normalPhotosList = [
     'Images/angel13.jpg'
 ];
 
-// 18+ фото - пути к файлам в папке Images18
+// 18+ фото - точные пути к файлам в папке images18 (маленькими буквами!)
 const adultPhotosList = [
-    'Images18/hot1.jpg',
-    'Images18/hot2.jpg',
-    'Images18/hot3.jpg',
-    'Images18/hot4.jpg',
-    'Images18/hot5.jpg',
-    'Images18/hot6.jpg',
-    'Images18/hot7.jpg',
-    'Images18/hot8.jpg'
+    'images18/hot1.jpg',
+    'images18/hot2.jpg',
+    'images18/hot3.jpg',
+    'images18/hot4.jpg',
+    'images18/hot5.jpg',
+    'images18/hot6.jpg',
+    'images18/hot7.jpg',
+    'images18/hot8.jpg'
 ];
 
 let currentPhotos = [];
@@ -52,15 +52,7 @@ const gameTitle = document.getElementById('gameTitle');
 const warningMsg = document.getElementById('warningMsg');
 const instruction = document.getElementById('instruction');
 
-// Проверка существования файла
-function checkImageExists(url, callback) {
-    const img = new Image();
-    img.onload = () => callback(true);
-    img.onerror = () => callback(false);
-    img.src = url;
-}
-
-// Загрузка фото с проверкой
+// Загрузка фото для обычного режима
 function loadPhotos(photoList, callback) {
     let loaded = 0;
     const photos = [];
@@ -70,7 +62,7 @@ function loadPhotos(photoList, callback) {
         return;
     }
 
-    photoList.forEach((src, index) => {
+    photoList.forEach((src) => {
         const img = new Image();
         img.onload = () => {
             photos.push(img);
@@ -81,17 +73,17 @@ function loadPhotos(photoList, callback) {
             }
         };
         img.onerror = () => {
-            console.warn(`⚠️ Фото не найдено: ${src}`);
-            // Создаём красивую заглушку
+            console.error(`❌ Не удалось загрузить фото: ${src}`);
+            // Создаём заглушку
             const canvasTemp = document.createElement('canvas');
             canvasTemp.width = ITEM_W;
             canvasTemp.height = ITEM_H;
             const ctxTemp = canvasTemp.getContext('2d');
-            ctxTemp.fillStyle = isAdultMode ? '#ff3366' : '#ffb7c5';
+            ctxTemp.fillStyle = '#ffb7c5';
             ctxTemp.fillRect(0, 0, ITEM_W, ITEM_H);
             ctxTemp.fillStyle = '#fff';
             ctxTemp.font = 'bold 30px "Segoe UI"';
-            ctxTemp.fillText(isAdultMode ? '🔥' : '❤️', ITEM_W/2-15, ITEM_H/2+10);
+            ctxTemp.fillText('❤️', ITEM_W/2-15, ITEM_H/2+10);
             const placeholder = new Image();
             placeholder.src = canvasTemp.toDataURL();
             photos.push(placeholder);
@@ -100,140 +92,81 @@ function loadPhotos(photoList, callback) {
                 callback(photos);
             }
         };
-        img.src = src + '?v=' + Date.now(); // Добавляем timestamp чтобы избежать кэширования
+        img.src = src + '?v=' + Date.now();
     });
 }
 
-// Функция для проверки и загрузки фото из Images18
-function loadAdultPhotosWithCheck() {
-    console.log('🔍 Проверяем наличие фото в папке Images18...');
+// ПРЯМАЯ ЗАГРУЗКА ФОТО ИЗ images18 (без проверок, просто загружаем)
+function loadAdultPhotosDirectly() {
+    console.log('🔥 Загружаем фото из папки images18...');
 
-    let foundPhotos = [];
-    let checkedCount = 0;
+    let loadedCount = 0;
+    const loadedPhotos = [];
 
-    adultPhotosList.forEach((src) => {
-        checkImageExists(src, (exists) => {
-            if (exists) {
-                console.log(`✅ Найдено фото: ${src}`);
-                const img = new Image();
-                img.onload = () => {
-                    foundPhotos.push(img);
-                    checkedCount++;
-                    if (checkedCount === adultPhotosList.length) {
-                        if (foundPhotos.length > 0) {
-                            currentPhotos = foundPhotos;
-                            console.log(`🔥 Загружено ${currentPhotos.length} фото из папки Images18!`);
-                            // Запускаем игру
-                            gameActive = true;
-                            gamePaused = false;
-                            score = 0;
-                            items = [];
-                            spawnCounter = 5;
-                            document.getElementById('score').innerText = '0';
+    adultPhotosList.forEach((src, index) => {
+        const img = new Image();
+        img.onload = () => {
+            loadedPhotos.push(img);
+            loadedCount++;
+            console.log(`✅ Загружено фото ${loadedCount}/${adultPhotosList.length}: ${src}`);
+            if (loadedCount === adultPhotosList.length) {
+                currentPhotos = loadedPhotos;
+                console.log(`🔥 Успешно загружено ${currentPhotos.length} фото из папки images18!`);
+                // Запускаем игру
+                gameActive = true;
+                gamePaused = false;
+                score = 0;
+                items = [];
+                spawnCounter = 5;
+                document.getElementById('score').innerText = '0';
 
-                            const gameOverModal = document.getElementById('gameOverModal');
-                            if (gameOverModal) gameOverModal.classList.remove('active');
+                const gameOverModal = document.getElementById('gameOverModal');
+                if (gameOverModal) gameOverModal.classList.remove('active');
 
-                            hideStopModal();
+                hideStopModal();
 
-                            if (animationId) cancelAnimationFrame(animationId);
-                            animationId = requestAnimationFrame(gameLoop);
-                        } else {
-                            console.log('😳 Фото в Images18 не найдены, используем заглушки');
-                            // Создаём заглушки
-                            const tempPhotos = [];
-                            for (let i = 0; i < 8; i++) {
-                                const canvasTemp = document.createElement('canvas');
-                                canvasTemp.width = ITEM_W;
-                                canvasTemp.height = ITEM_H;
-                                const ctxTemp = canvasTemp.getContext('2d');
-                                ctxTemp.fillStyle = '#ff3366';
-                                ctxTemp.fillRect(0, 0, ITEM_W, ITEM_H);
-                                ctxTemp.fillStyle = '#fff';
-                                ctxTemp.font = 'bold 28px "Segoe UI"';
-                                ctxTemp.fillText('😈', ITEM_W/2-15, ITEM_H/2+10);
-                                const placeholder = new Image();
-                                placeholder.src = canvasTemp.toDataURL();
-                                tempPhotos.push(placeholder);
-                            }
-                            currentPhotos = tempPhotos;
-                            console.log(`🔥 Игра запущена с демоническими заглушками!`);
-                            gameActive = true;
-                            gamePaused = false;
-                            score = 0;
-                            items = [];
-                            spawnCounter = 5;
-                            document.getElementById('score').innerText = '0';
-
-                            const gameOverModal = document.getElementById('gameOverModal');
-                            if (gameOverModal) gameOverModal.classList.remove('active');
-
-                            hideStopModal();
-
-                            if (animationId) cancelAnimationFrame(animationId);
-                            animationId = requestAnimationFrame(gameLoop);
-                        }
-                    }
-                };
-                img.src = src + '?v=' + Date.now();
-            } else {
-                console.log(`❌ Фото не найдено: ${src}`);
-                checkedCount++;
-                if (checkedCount === adultPhotosList.length) {
-                    if (foundPhotos.length > 0) {
-                        currentPhotos = foundPhotos;
-                        console.log(`🔥 Загружено ${currentPhotos.length} фото из папки Images18!`);
-                        gameActive = true;
-                        gamePaused = false;
-                        score = 0;
-                        items = [];
-                        spawnCounter = 5;
-                        document.getElementById('score').innerText = '0';
-
-                        const gameOverModal = document.getElementById('gameOverModal');
-                        if (gameOverModal) gameOverModal.classList.remove('active');
-
-                        hideStopModal();
-
-                        if (animationId) cancelAnimationFrame(animationId);
-                        animationId = requestAnimationFrame(gameLoop);
-                    } else {
-                        console.log('😳 Фото в Images18 не найдены, используем заглушки');
-                        const tempPhotos = [];
-                        for (let i = 0; i < 8; i++) {
-                            const canvasTemp = document.createElement('canvas');
-                            canvasTemp.width = ITEM_W;
-                            canvasTemp.height = ITEM_H;
-                            const ctxTemp = canvasTemp.getContext('2d');
-                            ctxTemp.fillStyle = '#ff3366';
-                            ctxTemp.fillRect(0, 0, ITEM_W, ITEM_H);
-                            ctxTemp.fillStyle = '#fff';
-                            ctxTemp.font = 'bold 28px "Segoe UI"';
-                            ctxTemp.fillText('😈', ITEM_W/2-15, ITEM_H/2+10);
-                            const placeholder = new Image();
-                            placeholder.src = canvasTemp.toDataURL();
-                            tempPhotos.push(placeholder);
-                        }
-                        currentPhotos = tempPhotos;
-                        console.log(`🔥 Игра запущена с демоническими заглушками!`);
-                        gameActive = true;
-                        gamePaused = false;
-                        score = 0;
-                        items = [];
-                        spawnCounter = 5;
-                        document.getElementById('score').innerText = '0';
-
-                        const gameOverModal = document.getElementById('gameOverModal');
-                        if (gameOverModal) gameOverModal.classList.remove('active');
-
-                        hideStopModal();
-
-                        if (animationId) cancelAnimationFrame(animationId);
-                        animationId = requestAnimationFrame(gameLoop);
-                    }
-                }
+                if (animationId) cancelAnimationFrame(animationId);
+                animationId = requestAnimationFrame(gameLoop);
             }
-        });
+        };
+        img.onerror = (e) => {
+            console.error(`❌ Ошибка загрузки фото: ${src}`);
+            console.log(`📁 Проверь, что файл существует по пути: ${src}`);
+            // Всё равно создаём заглушку, чтобы игра работала
+            const canvasTemp = document.createElement('canvas');
+            canvasTemp.width = ITEM_W;
+            canvasTemp.height = ITEM_H;
+            const ctxTemp = canvasTemp.getContext('2d');
+            ctxTemp.fillStyle = '#ff3366';
+            ctxTemp.fillRect(0, 0, ITEM_W, ITEM_H);
+            ctxTemp.fillStyle = '#fff';
+            ctxTemp.font = 'bold 28px "Segoe UI"';
+            ctxTemp.fillText('🔥', ITEM_W/2-15, ITEM_H/2+10);
+            const placeholder = new Image();
+            placeholder.src = canvasTemp.toDataURL();
+            loadedPhotos.push(placeholder);
+            loadedCount++;
+            if (loadedCount === adultPhotosList.length) {
+                currentPhotos = loadedPhotos;
+                console.log(`⚠️ Загружено ${currentPhotos.length} элементов (некоторые - заглушки)`);
+                gameActive = true;
+                gamePaused = false;
+                score = 0;
+                items = [];
+                spawnCounter = 5;
+                document.getElementById('score').innerText = '0';
+
+                const gameOverModal = document.getElementById('gameOverModal');
+                if (gameOverModal) gameOverModal.classList.remove('active');
+
+                hideStopModal();
+
+                if (animationId) cancelAnimationFrame(animationId);
+                animationId = requestAnimationFrame(gameLoop);
+            }
+        };
+        // Добавляем timestamp чтобы избежать кэша
+        img.src = src + '?v=' + Date.now();
     });
 }
 
@@ -352,8 +285,8 @@ function showComingSoonModal() {
     tryBtn.onmouseleave = () => tryBtn.style.transform = 'translateY(0)';
     tryBtn.onclick = () => {
         modal.remove();
-        // Загружаем фото из папки Images18 с проверкой
-        loadAdultPhotosWithCheck();
+        // ПРЯМАЯ ЗАГРУЗКА ФОТО
+        loadAdultPhotosDirectly();
     };
 
     if (!document.querySelector('#dynamicStyles')) {
@@ -731,6 +664,7 @@ document.getElementById('passwordInput').addEventListener('keypress', (e) => {
 
 // ЗАПУСК
 console.log('🎮 Игра загружается...');
+console.log('📁 Папка images18 должна содержать: hot1.jpg - hot8.jpg');
 loadPhotos(normalPhotosList, (photos) => {
     currentPhotos = photos;
     console.log('✅ Обычный режим готов!');
