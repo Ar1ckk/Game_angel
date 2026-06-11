@@ -1,0 +1,422 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(145deg, #1a0f1f 0%, #2d1a2e 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', 'Poppins', sans-serif;
+    padding: 20px;
+    transition: all 0.5s ease;
+}
+
+/* 18+ режим - фон */
+body.adult-mode {
+    background: linear-gradient(145deg, #1a0a0a 0%, #3d1a1a 100%);
+}
+
+body.adult-mode .game-container {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+}
+
+body.adult-mode .game-panel {
+    background: linear-gradient(135deg, #2a1a1a, #1a0a0a);
+    box-shadow: inset 0 0 0 2px #ff3366, 0 10px 25px rgba(0,0,0,0.5);
+}
+
+body.adult-mode #gameTitle {
+    color: #ff4466;
+    text-shadow: 0 0 10px #ff3366;
+}
+
+body.adult-mode .warning {
+    background: #ff3366;
+    animation: adultPulse 0.8s infinite;
+}
+
+@keyframes adultPulse {
+    0%, 100% { transform: scale(1); background: #ff3366; text-shadow: 0 0 5px #ff0000; }
+    50% { transform: scale(1.02); background: #ff6688; text-shadow: 0 0 15px #ff0000; }
+}
+
+body.adult-mode .score-board {
+    background: #ff3366;
+    box-shadow: inset 0 -2px 0 #cc1144, 0 0 10px #ff3366;
+}
+
+body.adult-mode .start-btn {
+    background: linear-gradient(135deg, #ff3366, #cc1144);
+    box-shadow: 0 5px 0 #880033;
+}
+
+body.adult-mode .restart-btn {
+    background: #ff5577;
+}
+
+body.adult-mode .instruction {
+    color: #ff7799;
+}
+
+.game-container {
+    background: rgba(255, 220, 240, 0.15);
+    backdrop-filter: blur(8px);
+    border-radius: 50px;
+    padding: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    transition: all 0.3s ease;
+}
+
+.game-panel {
+    background: linear-gradient(135deg, #fff5f9, #ffe8f0);
+    border-radius: 40px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.6), 0 10px 25px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+
+h1 {
+    color: #d43f6b;
+    font-size: 2em;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.warning {
+    background: #ff4444;
+    color: white;
+    padding: 12px;
+    border-radius: 30px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 1.1em;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    animation: pulse 1.5s infinite;
+    transition: all 0.3s ease;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); background: #ff4444; }
+    50% { transform: scale(1.02); background: #ff6666; }
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.score-board {
+    background: #ffb7c5;
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #2d0f1a;
+    box-shadow: inset 0 -2px 0 #ff6670;
+    min-width: 130px;
+}
+
+.start-btn, .stop-btn, .restart-btn, .adult-btn {
+    padding: 12px 20px;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.2s;
+    border: none;
+}
+
+.start-btn {
+    background: linear-gradient(135deg, #ff6b8a, #ff3b6b);
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    box-shadow: 0 5px 0 #8f2c48;
+    min-width: 170px;
+}
+
+.start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 0 #8f2c48;
+}
+
+.start-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #8f2c48;
+}
+
+.stop-btn {
+    background: linear-gradient(135deg, #ffaa44, #ff8844);
+    color: #2d0f1a;
+    box-shadow: 0 5px 0 #aa6633;
+    min-width: 110px;
+}
+
+.stop-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 0 #aa6633;
+}
+
+.stop-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #aa6633;
+}
+
+.restart-btn {
+    background: #ff90aa;
+    color: #2d0f1a;
+    box-shadow: 0 4px 0 #a1354d;
+    min-width: 130px;
+}
+
+.restart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #a1354d;
+}
+
+.restart-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #a1354d;
+}
+
+.adult-btn {
+    background: #2a1a2a;
+    color: #ff6688;
+    border: 1px solid #ff6688;
+    box-shadow: 0 4px 0 #1a0a1a;
+    min-width: 120px;
+}
+
+.adult-btn:hover {
+    transform: translateY(-2px);
+    background: #3a2a3a;
+    box-shadow: 0 6px 0 #1a0a1a;
+}
+
+.adult-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #1a0a1a;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+    border-radius: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    background: #ffeef4;
+    transition: all 0.3s ease;
+}
+
+.instruction {
+    margin-top: 15px;
+    color: #b84c6e;
+    font-weight: bold;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.active {
+    display: flex;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: linear-gradient(145deg, #fff0f5, #ffe0e8);
+    border-radius: 70px;
+    padding: 40px;
+    text-align: center;
+    max-width: 450px;
+    border: 3px solid #ffb7c5;
+    animation: bounce 0.4s;
+}
+
+@keyframes bounce {
+    0% { transform: scale(0.7); }
+    80% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* 18+ модалка */
+.adult-modal {
+    border: 3px solid #ff3366;
+    background: linear-gradient(145deg, #2a1a1a, #1a0a0a);
+    color: #ff6688;
+}
+
+.adult-heart {
+    font-size: 60px;
+    animation: adultHeartbeat 0.8s infinite;
+}
+
+@keyframes adultHeartbeat {
+    0%, 100% { transform: scale(1); text-shadow: 0 0 5px #ff3366; }
+    50% { transform: scale(1.2); text-shadow: 0 0 20px #ff3366; }
+}
+
+.question {
+    background: #ff336622;
+    padding: 15px;
+    border-radius: 30px;
+    margin: 20px 0;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #ff88aa;
+}
+
+.password-input {
+    width: 80%;
+    padding: 12px;
+    border-radius: 50px;
+    border: 2px solid #ff3366;
+    background: #2a0a0a;
+    color: #ff88aa;
+    font-size: 1.1em;
+    text-align: center;
+    margin-bottom: 15px;
+    outline: none;
+}
+
+.password-input:focus {
+    border-color: #ff6688;
+    box-shadow: 0 0 10px #ff3366;
+}
+
+.error-message {
+    color: #ff6666;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+    min-height: 30px;
+}
+
+.adult-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.submit-adult, .close-adult {
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: 0.1s;
+}
+
+.submit-adult {
+    background: linear-gradient(135deg, #ff3366, #cc1144);
+    color: white;
+    box-shadow: 0 4px 0 #880033;
+}
+
+.submit-adult:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #880033;
+}
+
+.close-adult {
+    background: #333;
+    color: white;
+    box-shadow: 0 4px 0 #1a1a1a;
+}
+
+.close-adult:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #1a1a1a;
+}
+
+.broken-heart {
+    font-size: 80px;
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+.stop-heart {
+    font-size: 70px;
+    animation: pulse 1s infinite;
+}
+
+.modal-content h2 {
+    color: #a51f44;
+    font-size: 2em;
+    margin: 15px 0;
+}
+
+.death-warning {
+    background: #2a0a14;
+    color: #ffb0c3;
+    padding: 12px;
+    border-radius: 40px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.stop-message {
+    background: #ffdd99;
+    color: #884400;
+    padding: 12px;
+    border-radius: 40px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+#restartModalBtn, .resume-btn {
+    background: #ff5f8e;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    color: white;
+    box-shadow: 0 4px 0 #8f2c48;
+}
+
+#restartModalBtn:active, .resume-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #8f2c48;
+}
+
+.resume-btn {
+    background: linear-gradient(135deg, #ff6b8a, #ff3b6b);
+}
+
+/* Демонический курсор для 18+ */
+body.adult-mode canvas {
+    cursor: none;
+}

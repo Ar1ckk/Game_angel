@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>❤️ Попади в Ангелочка ❤️</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="game-container" id="gameContainer">
+    <div class="game-panel" id="gamePanel">
+        <h1 id="gameTitle">❤️ ПОПАДИ В АНГЕЛОЧКА ❤️</h1>
+
+        <div class="warning" id="warningMsg">
+            ⚠️ ПРЕДУПРЕЖДЕНИЕ: если промахнёшься — умрёшь в реальной жизни! ⚠️
+            <br>Такого ангелочка нельзя упускать!
+        </div>
+
+        <div class="controls">
+            <div class="score-board">
+                ❤️ Счёт: <span id="score">0</span>
+            </div>
+
+            <button id="startLoveBtn" class="start-btn">💝 ДАРИТЬ ЛЮБОВЬ 💝</button>
+
+            <button id="stopBtn" class="stop-btn">⏹️ СТОП</button>
+
+            <button id="restartBtn" class="restart-btn">🔄 Новая игра</button>
+
+            <button id="adultModeBtn" class="adult-btn">🔞 18+ РЕЖИМ</button>
+        </div>
+
+        <canvas id="gameCanvas" width="900" height="550"></canvas>
+
+        <div class="instruction" id="instruction">
+            ❤️ Курсор в виде сердечка — целься прямо в фото! ❤️
+        </div>
+    </div>
+</div>
+
+<div id="gameOverModal" class="modal">
+    <div class="modal-content">
+        <div class="broken-heart">💔💀💔</div>
+        <h2>СЕРДЕЧКО РАЗБИТО!</h2>
+        <p>Ты упустил ангелочка...</p>
+        <div class="death-warning">
+            ☠️ ТЫ ПРОМАХНУЛСЯ — УМИРАЕШЬ В РЕАЛЬНОЙ ЖИЗНИ! ☠️
+        </div>
+        <button id="restartModalBtn">💝 Снова дарить любовь</button>
+    </div>
+</div>
+
+<div id="stopModal" class="modal">
+    <div class="modal-content stop-modal">
+        <div class="stop-heart">⏸️❤️</div>
+        <h2>Игра на паузе</h2>
+        <p>Ты остановил игру. Ангелочки замерли...</p>
+        <div class="stop-message">
+            Нажми "ДАРИТЬ ЛЮБОВЬ", чтобы продолжить дарить любовь!
+        </div>
+        <button id="resumeFromStopBtn" class="resume-btn">💝 Продолжить дарить любовь</button>
+    </div>
+</div>
+
+<!-- Модалка для входа в 18+ режим -->
+<div id="adultModal" class="modal">
+    <div class="modal-content adult-modal">
+        <div class="adult-heart">🔞🥵🔞</div>
+        <h2>ВХОД В 18+ РЕЖИМ</h2>
+        <p>Ответь на вопрос, чтобы войти в запретную зону...</p>
+        <div class="question">
+            Как зовут котенка, который без ума от тебя?
+        </div>
+        <input type="text" id="passwordInput" placeholder="Введи имя..." class="password-input">
+        <div id="passwordError" class="error-message"></div>
+        <div class="adult-buttons">
+            <button id="submitPasswordBtn" class="submit-adult">🔓 Войти в 18+</button>
+            <button id="closeAdultBtn" class="close-adult">❌ Отмена</button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
